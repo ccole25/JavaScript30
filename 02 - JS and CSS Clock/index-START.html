@@ -62,13 +62,57 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.42, 0, 0, 4.04);
     }
 
   </style>
 
   <script>
+    const hourHand = document.querySelector(".hour-hand");
+    const minuteHand = document.querySelector(".min-hand");
+    const secondHand = document.querySelector(".second-hand");
 
+    function setDate() {
+      /**
+      * Gets to 90 degrees or 0 and goes backwards to get to where is was, rather
+      * than just going forward.
+      * 1. Tally the amount of degrees and keep on counting.
+      * 2. Temporarily take off the transition, so it doesn't transition itself backwards.
+      *    Then re-apply the class after.
+      **/
+      const now = new Date();
+      /**
+      * Gives us the percentage Multipled by the full circle.
+      * 90 degrees is added to make up for overriding the default origin of the
+      * hand, transform: rotate(90deg);
+      **/
+      const hours = now.getHours();
+      const hoursDegrees = ((hours / 60) * 360 + 90);
+      if(hours === 0) {
+        hourHand.style.transition = "none";
+      }
+      hourHand.style.transform = `rotate(${hoursDegrees}deg)`
 
+      const minutes = now.getMinutes();
+      const minutesDegrees = ((minutes / 60) * 360 + 90);
+      if(minutes === 0) {
+        minuteHand.style.transition = "none";
+      }
+      minuteHand.style.transform = `rotate(${minutesDegrees}deg)`
+
+      const seconds = now.getSeconds();
+      const secondsDegrees = ((seconds / 60) * 360 + 90);
+      if(seconds === 0) {
+        secondHand.style.transition = "none";
+      }
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`
+      console.log("seconds::", seconds);
+    }
+
+    setInterval(setDate, 1000);
   </script>
 </body>
 </html>
